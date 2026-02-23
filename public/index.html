@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EventNotify Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1>EventNotify</h1>
+        <p>Demo visual (Express + SSE) — Observer, Strategy, Factory Method, Facade.</p>
+      </header>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Suscribir usuario</h2>
+          <form id="subscribeForm">
+            <label>
+              Nombre
+              <input id="subName" placeholder="Ej. Ana" required />
+            </label>
+
+            <label>
+              Canal
+              <select id="subChannel">
+                <option value="email">Email</option>
+                <option value="sms">SMS</option>
+                <option value="push">Push</option>
+              </select>
+            </label>
+
+            <button type="submit">Suscribir</button>
+          </form>
+
+          <div class="subscribers">
+            <div class="row">
+              <h3>Suscriptores</h3>
+              <button id="refreshSubs" type="button">Actualizar</button>
+            </div>
+            <ul id="subsList"></ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Publicar evento</h2>
+          <form id="publishForm">
+            <label>
+              Título del evento
+              <input id="eventTitle" placeholder="Ej. Reunión de equipo" required />
+            </label>
+
+            <label>
+              Tipo
+              <select id="eventType">
+                <option value="CREATED">CREATED</option>
+                <option value="UPDATED">UPDATED</option>
+                <option value="CANCELLED">CANCELLED</option>
+              </select>
+            </label>
+
+            <button type="submit">Publicar</button>
+          </form>
+
+          <div class="hint">
+            <p>
+              Al publicar, el servidor notifica a todos los suscriptores y empuja las notificaciones en
+              tiempo real a este navegador via <strong>SSE</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Feed de notificaciones (SSE)</h2>
+        <div class="status">
+          Estado: <span id="sseStatus">conectando...</span>
+        </div>
+        <ul id="feed"></ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
