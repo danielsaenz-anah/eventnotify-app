@@ -7,96 +7,177 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="container">
-      <header class="header">
-        <h1>EventNotify</h1>
-        <p>Demo visual (Express + SSE) — Observer, Strategy, Factory Method, Facade.</p>
-      </header>
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="#inicio" class="brand">EventNotify</a>
 
-      <section class="grid">
-        <div class="card">
-          <h2>Suscribir usuario</h2>
-          <form id="subscribeForm">
-            <label>
-              Nombre
-              <input id="subName" placeholder="Ej. Ana" required />
-            </label>
+      <nav class="nav-menu">
+        <a href="#inicio">Inicio</a>
+        <a href="#arquitectura">Arquitectura</a>
+        <a href="#demo">Demo</a>
+        <a href="#tiempo-real">Tiempo real</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
 
-            <label>
-              Canal
-              <select id="subChannel">
-                <option value="email">Email</option>
-                <option value="sms">SMS</option>
-                <option value="push">Push</option>
-              </select>
-            </label>
+      <a href="#demo" class="nav-cta">Ver demo</a>
+    </div>
+  </header>
 
-            <button type="submit">Suscribir</button>
-          </form>
+  <section class="hero-section" id="inicio">
+    <div class="hero-container">
+      <div class="hero-text">
+        <span class="hero-tag">Sistema de eventos y notificaciones</span>
+        <h1>Notificaciones en tiempo real con una arquitectura más clara y escalable</h1>
+        <p>
+          EventNotify es una demo funcional que permite gestionar eventos, suscriptores
+          y notificaciones multicanal con una interfaz más ordenada y una arquitectura
+          desacoplada.
+        </p>
 
-          <div class="subscribers">
-            <div class="row">
-              <h3>Suscriptores</h3>
-              <button id="refreshSubs" type="button">Actualizar</button>
-            </div>
-            <ul id="subsList"></ul>
-          </div>
+        <div class="hero-actions">
+          <a href="#demo" class="hero-btn primary">Probar sistema</a>
+          <a href="#arquitectura" class="hero-btn secondary">Ver arquitectura</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="hero-mini-card">
+          <span>Canales</span>
+          <strong>Email · SMS · Push</strong>
+        </div>
+        <div class="hero-mini-card">
+          <span>Comunicación</span>
+          <strong>SSE en tiempo real</strong>
+        </div>
+        <div class="hero-mini-card">
+          <span>Arquitectura</span>
+          <strong>Facade · Observer · Factory · Strategy</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="info-section" id="arquitectura">
+    <div class="section-container">
+      <div class="section-heading">
+        <span class="section-tag">Arquitectura</span>
+        <h2>Una estructura diseñada para separar responsabilidades</h2>
+        <p>
+          El sistema desacopla la publicación de eventos, la creación de notificaciones
+          y el envío por canal, lo que permite una solución más modular y fácil de extender.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3>Facade</h3>
+          <p>Centraliza la interacción del sistema desde un solo punto.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3>Observer</h3>
+          <p>Permite notificar automáticamente a todos los suscriptores registrados.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3>Factory + Strategy</h3>
+          <p>Define el canal correcto y encapsula el comportamiento de envío.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" id="demo">
+    <div class="app-grid">
+      <section class="card">
+        <h2>Suscribir usuario</h2>
+
+        <form id="subscribeForm">
+          <label for="subName">Nombre</label>
+          <input id="subName" type="text" placeholder="Ej. Ana" required />
+
+          <label for="subChannel">Canal</label>
+          <select id="subChannel">
+            <option value="email">Email</option>
+            <option value="sms">SMS</option>
+            <option value="push">Push</option>
+          </select>
+
+          <button type="submit">Suscribir</button>
+        </form>
+
+        <div class="subscribers-header">
+          <h3>Suscriptores</h3>
+          <button id="refreshSubs" type="button">Actualizar</button>
         </div>
 
-        <div class="card">
-          <h2>Publicar evento</h2>
-          <form id="publishForm">
-            <label>
-              Título del evento
-              <input id="eventTitle" placeholder="Ej. Reunión de equipo" required />
-            </label>
-
-            <label>
-              Tipo
-              <select id="eventType">
-                <option value="CREATED">CREATED</option>
-                <option value="UPDATED">UPDATED</option>
-                <option value="CANCELLED">CANCELLED</option>
-              </select>
-            </label>
-
-            <button type="submit">Publicar</button>
-          </form>
-
-          <div class="hint">
-            <p>
-              Al publicar, el servidor notifica a todos los suscriptores y empuja las notificaciones en
-              tiempo real a este navegador via <strong>SSE</strong>.
-            </p>
-          </div>
-        </div>
+        <ul id="subsList"></ul>
       </section>
 
       <section class="card">
-  <h2>Resumen del sistema</h2>
-  <div class="stats-grid">
-    <div class="stat-box">
-      <span class="stat-label">Suscriptores</span>
-      <strong id="totalSubscribers">0</strong>
-    </div>
-    <div class="stat-box">
-      <span class="stat-label">Último evento</span>
-      <strong id="lastEvent">Sin eventos</strong>
-    </div>
-    <div class="stat-box">
-      <span class="stat-label">Estado SSE</span>
-      <strong id="sseStatus">conectando...</strong>
-    </div>
-  </div>
-</section>
+        <h2>Publicar evento</h2>
 
-<section class="card">
-  <h2>Feed de notificaciones (SSE)</h2>
-  <div id="messageBox" class="message-box hidden"></div>
-  <ul id="feed"></ul>
-</section>
-    </main>
+        <form id="publishForm">
+          <label for="eventTitle">Título del evento</label>
+          <input id="eventTitle" type="text" placeholder="Ej. Reunión de equipo" required />
 
-    <script src="app.js"></script>
-  </body>
+          <label for="eventType">Tipo</label>
+          <select id="eventType">
+            <option value="CREATED">CREATED</option>
+            <option value="UPDATED">UPDATED</option>
+            <option value="CANCELLED">CANCELLED</option>
+          </select>
+
+          <button type="submit">Publicar</button>
+        </form>
+
+        <p class="card-description">
+          Al publicar, el servidor notifica a todos los suscriptores y envía las
+          actualizaciones en tiempo real a esta interfaz mediante SSE.
+        </p>
+      </section>
+    </div>
+
+    <section class="card summary-card">
+      <h2>Resumen del sistema</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-label">Suscriptores</span>
+          <strong id="totalSubscribers">0</strong>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Último evento</span>
+          <strong id="lastEvent">Sin eventos</strong>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Estado SSE</span>
+          <strong id="sseStatus">conectando...</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="tiempo-real">
+      <h2>Feed de notificaciones (SSE)</h2>
+      <div id="messageBox" class="message-box hidden"></div>
+      <ul id="feed"></ul>
+    </section>
+  </main>
+
+  <section class="info-section alt-section" id="contacto">
+    <div class="section-container contact-box">
+      <div>
+        <span class="section-tag">Contacto</span>
+        <h2>Visualiza el comportamiento del sistema</h2>
+        <p>
+          Esta demo permite explorar suscriptores, publicación de eventos y recepción
+          de notificaciones en tiempo real desde una sola interfaz.
+        </p>
+      </div>
+
+      <a href="#demo" class="hero-btn primary">Ir a la demo</a>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
 </html>
