@@ -144,3 +144,49 @@ es.addEventListener("notification", (evt) => {
 // Cargar inicial
 loadSubscribers();
 loadStats();
+
+// Carrusel informativo
+const slides = Array.from(document.querySelectorAll(".slide"));
+const prevSlideBtn = document.getElementById("prevSlide");
+const nextSlideBtn = document.getElementById("nextSlide");
+const dotsContainer = document.getElementById("carouselDots");
+
+let currentSlide = 0;
+
+function renderCarousel() {
+  slides.forEach((slide, index) => {
+    slide.classList.toggle("active", index === currentSlide);
+  });
+
+  if (dotsContainer) {
+    dotsContainer.innerHTML = "";
+    slides.forEach((_, index) => {
+      const dot = document.createElement("button");
+      dot.className = `carousel-dot ${index === currentSlide ? "active" : ""}`;
+      dot.addEventListener("click", () => {
+        currentSlide = index;
+        renderCarousel();
+      });
+      dotsContainer.appendChild(dot);
+    });
+  }
+}
+
+if (prevSlideBtn && nextSlideBtn && slides.length > 0) {
+  prevSlideBtn.addEventListener("click", () => {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    renderCarousel();
+  });
+
+  nextSlideBtn.addEventListener("click", () => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    renderCarousel();
+  });
+
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    renderCarousel();
+  }, 5000);
+
+  renderCarousel();
+}
