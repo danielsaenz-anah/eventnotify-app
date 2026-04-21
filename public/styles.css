@@ -22,3 +22,47 @@ ul { list-style: none; padding: 0; margin: 10px 0 0; }
 li { padding: 10px 12px; border: 1px solid #22304a; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .status { margin: 8px 0 10px; opacity: 0.9; }
 .hint { opacity: 0.85; font-size: 14px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-box {
+  background: #0b0f17;
+  border: 1px solid #22304a;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 13px;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.stat-box strong {
+  font-size: 20px;
+}
+
+.message-box {
+  margin: 8px 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #2b3b5b;
+  background: #1a2640;
+  color: #e8eefc;
+}
+
+.hidden {
+  display: none;
+}

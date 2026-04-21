@@ -73,12 +73,28 @@
       </section>
 
       <section class="card">
-        <h2>Feed de notificaciones (SSE)</h2>
-        <div class="status">
-          Estado: <span id="sseStatus">conectando...</span>
-        </div>
-        <ul id="feed"></ul>
-      </section>
+  <h2>Resumen del sistema</h2>
+  <div class="stats-grid">
+    <div class="stat-box">
+      <span class="stat-label">Suscriptores</span>
+      <strong id="totalSubscribers">0</strong>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">Último evento</span>
+      <strong id="lastEvent">Sin eventos</strong>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">Estado SSE</span>
+      <strong id="sseStatus">conectando...</strong>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Feed de notificaciones (SSE)</h2>
+  <div id="messageBox" class="message-box hidden"></div>
+  <ul id="feed"></ul>
+</section>
     </main>
 
     <script src="app.js"></script>

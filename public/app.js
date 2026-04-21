@@ -4,6 +4,9 @@ const feed = document.getElementById("feed");
 const sseStatus = document.getElementById("sseStatus");
 const subsList = document.getElementById("subsList");
 const refreshSubs = document.getElementById("refreshSubs");
+const totalSubscribers = document.getElementById("totalSubscribers");
+const lastEvent = document.getElementById("lastEvent");
+const messageBox = document.getElementById("messageBox");
 
 function addFeedItem(text) {
   const li = document.createElement("li");
@@ -11,10 +14,35 @@ function addFeedItem(text) {
   feed.prepend(li);
 }
 
+function showMessage(text) {
+  messageBox.textContent = text;
+  messageBox.classList.remove("hidden");
+
+  setTimeout(() => {
+    messageBox.classList.add("hidden");
+  }, 2500);
+}
+
+async function loadStats() {
+  const res = await fetch("/api/stats");
+  const data = await res.json();
+
+  totalSubscribers.textContent = data.totalSubscribers ?? 0;
+
+  if (data.lastEvent) {
+    lastEvent.textContent = `${data.lastEvent.title} (${data.lastEvent.type})`;
+  } else {
+    lastEvent.textContent = "Sin eventos";
+  }
+}
+
 async function loadSubscribers() {
   const res = await fetch("/api/subscribers");
   const data = await res.json();
   subsList.innerHTML = "";
+
+  totalSubscribers.textContent = data.total ?? 0;
+
   for (const s of data.subscribers) {
     const li = document.createElement("li");
     li.innerHTML = `<span>${s.name} — ${s.channel}</span>
@@ -30,12 +58,18 @@ async function loadSubscribers() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
+      showMessage("Usuario eliminado correctamente");
       await loadSubscribers();
+      await loadStats();
     });
   });
 }
 
-refreshSubs.addEventListener("click", loadSubscribers);
+refreshSubs.addEventListener("click", async () => {
+  await loadSubscribers();
+  await loadStats();
+  showMessage("Lista actualizada");
+});
 
 subscribeForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -50,13 +84,15 @@ subscribeForm.addEventListener("submit", async (e) => {
 
   const data = await res.json();
   if (data.error) {
-    alert(data.error);
+    showMessage(data.error);
     return;
   }
 
   addFeedItem(`✅ Suscrito: ${data.subscriber.name} (${data.subscriber.channel})`);
+  showMessage("Usuario suscrito correctamente");
   subscribeForm.reset();
   await loadSubscribers();
+  await loadStats();
 });
 
 publishForm.addEventListener("submit", async (e) => {
@@ -72,12 +108,14 @@ publishForm.addEventListener("submit", async (e) => {
 
   const data = await res.json();
   if (data.error) {
-    alert(data.error);
+    showMessage(data.error);
     return;
   }
 
   addFeedItem(`📌 Evento publicado: "${data.event.title}" (${data.event.type})`);
+  showMessage("Evento publicado correctamente");
   publishForm.reset();
+  await loadStats();
 });
 
 // SSE
@@ -103,5 +141,6 @@ es.addEventListener("notification", (evt) => {
   addFeedItem(`${n.rendered} | latencia: ${n.latencyMs}ms`);
 });
 
-// Cargar lista inicial
+// Cargar inicial
 loadSubscribers();
+loadStats();

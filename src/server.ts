@@ -152,6 +152,7 @@ class EventNotifyFacade {
   private dispatcher = new AsyncDispatcher();
 
   private subscribers: Map<string, Subscriber> = new Map();
+  private lastEvent: DomainEvent | null = null;
 
   // "Clientes SSE" conectados
   private sseClients: Set<Response> = new Set();
@@ -196,6 +197,8 @@ class EventNotifyFacade {
       createdAt: Date.now()
     };
 
+    this.lastEvent = event;
+
     const messages = this.bus.notifyAll(event);
     this.dispatcher.dispatch(messages, (m) => this.broadcast(m));
 
@@ -204,6 +207,14 @@ class EventNotifyFacade {
 
   subscriberCount(): number {
     return this.bus.count();
+  }
+
+  getStats() {
+    return {
+      totalSubscribers: this.subscriberCount(),
+      totalSseClients: this.sseClients.size,
+      lastEvent: this.lastEvent
+    };
   }
 }
 
@@ -295,6 +306,13 @@ app.post("/api/publish", (req: Request, res: Response) => {
 
   const event = facade.publishEvent(title.trim(), type);
   return res.json({ event, totalSubscribers: facade.subscriberCount() });
+});
+
+/**
+ * API: estadísticas básicas
+ */
+app.get("/api/stats", (_req: Request, res: Response) => {
+  return res.json(facade.getStats());
 });
 
 app.listen(PORT, () => {
