@@ -1,30 +1,30 @@
 # Root Cause Analysis (5 Whys) - EventNotify
 
 ## Problema detectado
-Alta dependencia entre la gestión de eventos y el sistema de notificaciones en la arquitectura inicial.
+Persistencia de lógica no utilizada en el frontend, específicamente código relacionado con un carrusel que ya no formaba parte de la interfaz final.
 
 ## 5 Whys
 
-1. ¿Por qué existía alta dependencia?
-Porque el flujo de eventos llamaba directamente al módulo de notificaciones.
+1. ¿Por qué existía lógica no utilizada en el frontend?
+Porque se implementó un carrusel que después dejó de formar parte del diseño final.
 
-2. ¿Por qué llamaba directamente al módulo de notificaciones?
-Porque el diseño inicial centralizaba la coordinación en un solo punto.
+2. ¿Por qué el carrusel dejó de usarse?
+Porque la interfaz evolucionó hacia una estructura más limpia y el componente dejó de aportar valor real.
 
-3. ¿Por qué se centralizó la coordinación?
-Porque inicialmente se priorizó funcionalidad sobre separación de responsabilidades.
+3. ¿Por qué no se eliminó inmediatamente?
+Porque no existía una revisión formal de limpieza de código después de los cambios de diseño.
 
-4. ¿Por qué eso se volvió una desviación?
-Porque al agregar múltiples canales y requerimientos de escalabilidad, el diseño inicial ya no fue suficiente.
+4. ¿Por qué no había una revisión de limpieza?
+Porque el enfoque estaba más orientado a implementar funcionalidad y presentación que a depurar código residual.
 
-5. ¿Por qué fue necesario corregirlo?
-Porque generaba deuda técnica, dificultaba extender el sistema y afectaba la claridad del flujo.
+5. ¿Por qué esto se volvió una desviación del proceso?
+Porque generaba complejidad innecesaria, afectaba la claridad del frontend y reducía la mantenibilidad del sistema.
 
 ## Acción correctiva
-Se aplicó una refactorización con Facade, Observer, Factory Method y Strategy.
+Se eliminó la lógica del carrusel mediante un commit específico de limpieza del frontend, acompañado de una reorganización visual de la interfaz y una actualización del CHANGELOG.
 
 ## Resultado esperado
-- menor acoplamiento,
-- mayor extensibilidad,
-- mejor claridad arquitectónica,
-- mejor preparación para escenarios de tiempo real.
+- frontend más claro y mantenible
+- reducción de código innecesario
+- mejor alineación entre interfaz y lógica implementada
+- fortalecimiento del proceso de revisión y limpieza antes de cada release
