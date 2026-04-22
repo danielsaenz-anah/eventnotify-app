@@ -1,112 +1,112 @@
 # EventNotify
 
-Sistema de notificaciones basado en eventos desarrollado en **Node.js + TypeScript + Express + SSE**.
+Sistema de notificaciones basado en eventos desarrollado en Node.js + TypeScript + Express + Server-Sent Events (SSE).
 
-Proyecto académico para la materia **Ingeniería de Software II** enfocado en:
-
-- Refactorización orientada a objetos
-- Aplicación de Patrones de Diseño
-- Manejo de eventos en tiempo real (Soft Real-Time)
+Arquitectura orientada a eventos con aplicación de patrones de diseño y control de versiones para garantizar trazabilidad, escalabilidad y mantenibilidad.
 
 ---
 
-##  Descripción
+## Descripción
 
 EventNotify es una aplicación que permite:
 
-1. Suscribir usuarios a distintos canales de notificación (Email, SMS, Push).
-2. Publicar eventos (CREATED, UPDATED, CANCELLED).
-3. Notificar automáticamente a todos los suscriptores.
-4. Visualizar las notificaciones en tiempo real mediante **Server-Sent Events (SSE)**.
-
-La arquitectura del sistema aplica múltiples patrones de diseño para reducir acoplamiento y mejorar escalabilidad.
+1. Suscribir usuarios a distintos canales de notificación (Email, SMS, Push)
+2. Publicar eventos (CREATED, UPDATED, CANCELLED)
+3. Notificar automáticamente a todos los suscriptores
+4. Visualizar las notificaciones en tiempo real mediante SSE
+5. Consultar métricas del sistema en tiempo real (/api/stats)
 
 ---
 
 ## Arquitectura y Patrones Implementados
 
-### Facade (Patrón Estructural)
+### Facade (Estructural)
 
-Clase principal: `EventNotifyFacade`
+Clase: EventNotifyFacade
 
-**Responsabilidad:**
-- Actúa como punto único de acceso al sistema.
-- Coordina suscripciones, publicación de eventos y despacho de notificaciones.
-- Oculta la complejidad interna (EventBus, Factory, Strategies).
+- Punto único de acceso al sistema
+- Orquesta la lógica de negocio
+- Encapsula complejidad interna
 
-**Beneficio:**
-- Reduce acoplamiento entre la capa web y la lógica interna.
-- Mejora mantenibilidad.
+Beneficio: desacoplamiento entre frontend y lógica interna.
 
 ---
 
-###  Observer (Patrón de Comportamiento)
+### Observer (Comportamiento)
 
-Clases principales:
-- `EventBus`
-- `UserSubscriber`
+Clases:
+- EventBus
+- UserSubscriber
 
-**Responsabilidad:**
-- Permite que múltiples suscriptores reaccionen automáticamente cuando se publica un evento.
-- Desacopla el emisor del evento de los receptores.
+- Permite notificación automática a múltiples suscriptores
+- Desacopla productor de consumidores
 
-**Beneficio:**
-- Escalabilidad.
-- Extensibilidad.
-- Eliminación de dependencias directas entre módulos.
+Beneficio: escalabilidad y extensibilidad.
 
 ---
 
-###  Strategy (Patrón de Comportamiento)
+### Strategy (Comportamiento)
 
-Clases principales:
-- `EmailStrategy`
-- `SmsStrategy`
-- `PushStrategy`
+Clases:
+- EmailStrategy
+- SmsStrategy
+- PushStrategy
 
-**Responsabilidad:**
-- Define distintos algoritmos de envío de notificaciones según el canal.
-- Permite intercambiar comportamiento sin modificar el núcleo del sistema.
+- Define diferentes formas de notificación
+- Permite cambiar comportamiento dinámicamente
 
-**Beneficio:**
-- Cumple con el Principio Abierto/Cerrado (OCP).
-- Elimina estructuras condicionales complejas (if/switch por canal).
+Beneficio: cumplimiento del principio Open/Closed.
 
 ---
 
-###  Factory Method (Patrón Creacional)
+### Factory Method (Creacional)
 
-Clase principal:
-- `NotificationFactory`
+Clase:
+- NotificationFactory
 
-**Responsabilidad:**
-- Centraliza la creación de estrategias de notificación.
-- Evita instanciaciones directas dispersas en el sistema.
+- Centraliza creación de estrategias
+- Evita instanciación directa
 
-**Beneficio:**
-- Reduce acoplamiento.
-- Facilita la extensión a nuevos canales.
+Beneficio: reducción de acoplamiento.
 
 ---
 
-##  Manejo de Tiempo Real
+## Manejo de Tiempo Real
 
-El sistema implementa:
+- Eventos procesados de forma asincrónica
+- Notificaciones enviadas con setTimeout (simulación concurrente)
+- Comunicación en tiempo real vía SSE
+- Medición de latencia por evento
 
-- Publicación de eventos asincrónica
-- Despacho de notificaciones mediante `setTimeout` (simulación de concurrencia)
-- Envío en tiempo real al navegador mediante **Server-Sent Events (SSE)**
-
-Además, se mide la **latencia (ms)** entre la creación del evento y el envío de la notificación.
-
-Esto representa un modelo de **Soft Real-Time**, donde la respuesta rápida mejora la experiencia, pero no es crítica.
+Modelo implementado: Soft Real-Time
 
 ---
 
-##  Estructura del Proyecto
+## Funcionalidades agregadas (v1.1 - v1.2)
 
-```
+- Panel de resumen del sistema
+- Endpoint /api/stats para métricas
+- Visualización de:
+  - Total de suscriptores
+  - Último evento
+  - Estado SSE
+- Mejora de interfaz de usuario
+- Navegación superior y diseño más estructurado
+- Feedback visual (mensajes dinámicos)
+- Eliminación de lógica redundante en frontend
+- Integración de documentación de auditoría (/docs)
+- Implementación de CHANGELOG
+
+---
+
+## Estructura del Proyecto
+
 eventnotify-app/
+│
+├── docs/
+│   ├── AUDIT_BASELINE.md
+│   ├── METRICS.md
+│   └── RCA.md
 │
 ├── public/
 │   ├── index.html
@@ -116,81 +116,74 @@ eventnotify-app/
 ├── src/
 │   └── server.ts
 │
+├── CHANGELOG.md
 ├── package.json
 ├── tsconfig.json
 └── README.md
-```
 
 ---
 
 ## Instalación y Ejecución
 
-### Clonar el repositorio
+Clonar repositorio:
 
-```bash
-git clone https://github.com/danielsaenz-anah/eventnotify-app.git
-cd eventnotify-app
-```
+git clone https://github.com/danielsaenz-anah/eventnotify-app.git  
+cd eventnotify-app  
 
-### Instalar dependencias
+Instalar dependencias:
 
-```bash
-npm install
-```
+npm install  
 
-###  Ejecutar en modo desarrollo
+Ejecutar en desarrollo:
 
-```bash
-npm run dev
-```
+npm run dev  
 
-### Abrir en el navegador
+Acceder:
 
-```
 http://localhost:3000
-```
 
 ---
 
-##  Flujo de Uso
+## Flujo de Uso
 
-1. Suscribir uno o más usuarios.
-2. Publicar un evento.
-3. Observar cómo llegan notificaciones en tiempo real.
-4. Ver la latencia registrada en cada notificación.
-
----
-
-##  Contexto Académico
-
-Proyecto desarrollado como parte de la entrega final del **Primer Parcial** en:
-
-**Ingeniería de Software II**  
-Universidad Anáhuac Mayab  
-
-Enfoque principal:
-
-- Refactorización
-- Patrones de diseño
-- Mejora de arquitectura
-- Aplicación de conceptos de sistemas orientados a eventos
+1. Registrar usuarios en distintos canales
+2. Publicar un evento
+3. Observar notificaciones en tiempo real
+4. Consultar métricas del sistema
+5. Validar latencia por evento
 
 ---
 
-## Versión
+## Versionado
 
-Versión estable etiquetada como:
+El proyecto utiliza versionado mediante Git Tags y Releases:
 
-```
-v1.0
-```
+- v1.0 → Implementación base del sistema
+- v1.1 → Métricas, auditoría y trazabilidad
+- v1.2 → Mejora visual, navegación y refinamiento del frontend
+
+El historial de cambios detallado se encuentra en CHANGELOG.md
 
 ---
 
-##  Autores
+## Evidencia de Ingeniería de Software
+
+El proyecto incluye:
+
+- Control de versiones (Git)
+- Trazabilidad de cambios (CHANGELOG)
+- Métricas del sistema
+- Análisis de causa raíz (RCA)
+- Documentación de líneas base
+
+Ubicación: /docs
+
+---
+
+## Autores
 
 - Daniel Saenz Villanueva  
 - Jorge Flota  
 - Isabella Medina  
 - Kevin Pacho  
-- Tomas Altamirano
+- Tomas Altamirano  
